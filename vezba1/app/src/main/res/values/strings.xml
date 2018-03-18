@@ -4,4 +4,17 @@
     <string name="username">Username</string>
     <string name="login_button">LOGIN</string>
     <string name="register_button">REGISTER</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">E-mail</string>
+    <string name="gender">gender:</string>
+    <string-array name="spinner_item">
+        <item>male</item>
+        <item>female</item>
+    </string-array>
+    <string name="check_box">Accept Notification</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="my_friend">My Friend</string>
+    <string name="message_text">message text</string>
+    <string name="send">send</string>
 </resources>

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PROJEKAT.iml" filepath="$PROJECT_DIR$/PROJEKAT.iml" />
+      <module fileurl="file://C:\Users\Korisnik\Desktop\Bojan\PNRS1\Andorid test 1\Android-prvi_test\vezba1\PROJEKAT.iml" filepath="C:\Users\Korisnik\Desktop\Bojan\PNRS1\Andorid test 1\Android-prvi_test\vezba1\PROJEKAT.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Korisnik\Desktop\Bojan\PNRS1\Andorid test 1\Android-prvi_test\vezba1\app\app.iml" filepath="C:\Users\Korisnik\Desktop\Bojan\PNRS1\Andorid test 1\Android-prvi_test\vezba1\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vezba1.iml" filepath="$PROJECT_DIR$/vezba1.iml" />
     </modules>
   </component>
 </project>
