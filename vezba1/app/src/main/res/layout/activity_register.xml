@@ -16,7 +16,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/user_reg_id"
+            android:id="@+id/reg_user_id"
             android:ems="7"
             android:layout_marginLeft="9dp"
             android:layout_marginTop="5dp"
@@ -25,7 +25,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/first_name_id"
+            android:id="@+id/reg_first_name_id"
             android:ems="8"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
@@ -42,7 +42,8 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/pass_reg_id"
+            android:id="@+id/reg_pass_id"
+            android:inputType="textPassword"
             android:ems="7"
             android:layout_marginLeft="9dp"
             android:layout_marginTop="5dp"
@@ -51,7 +52,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/last_name_id"
+            android:id="@+id/reg_last_name_id"
             android:ems="8"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
@@ -68,7 +69,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/email_id"
+            android:id="@+id/reg_email_id"
             android:ems="7"
             android:layout_marginLeft="9dp"
             android:layout_marginTop="5dp"
@@ -77,7 +78,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gender_id"
+            android:id="@+id/reg_gender_id"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="6dp"
             android:text="@string/gender"
@@ -86,7 +87,7 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gender_spinner_id"
+            android:id="@+id/reg_gender_spinner_id"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="6dp"
             android:entries="@array/spinner_item">
@@ -102,7 +103,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/check_id"
+            android:id="@+id/reg_check_id"
             android:layout_marginLeft="9dp"
             android:hint="@string/check_box"
             android:shadowColor="@color/colorDarkRed"/>
@@ -115,7 +116,7 @@
         <DatePicker
             android:layout_width="350dp"
             android:layout_height="270dp"
-            android:id="@+id/date_id"
+            android:id="@+id/reg_date_id"
             android:layout_gravity="center"
             android:datePickerMode="spinner"
             android:headerBackground="@color/colorDarkRed"
@@ -126,8 +127,9 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/reg_activity_button_id"
+            android:id="@+id/reg_button_id"
             android:layout_gravity="center"
+            android:enabled="false"
             android:background="@color/colorDarkRed"
             android:text="@string/register_button"/>
 

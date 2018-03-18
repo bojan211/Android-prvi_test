@@ -26,12 +26,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        username = findViewById(R.id.user_text);
-        password = findViewById(R.id.pass_text);
+        username = findViewById(R.id.main_user_text);
+        password = findViewById(R.id.main_pass_text);
 
-        log = findViewById(R.id.log_button);
+        log = findViewById(R.id.main_log_button);
         log.setOnClickListener(this);
-        reg = findViewById(R.id.reg_button);
+        reg = findViewById(R.id.main_reg_button);
         reg.setOnClickListener(this);
 
         username.addTextChangedListener(new TextWatcher() {
@@ -95,14 +95,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.reg_button) {
+        if(view.getId() == R.id.main_reg_button) {
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         }
-        if(view.getId() == R.id.log_button) {
+        else if(view.getId() == R.id.main_log_button) {
             Intent intent2 = new Intent(MainActivity.this, ContactsActivity.class);
             startActivity(intent2);
         }
-        //DODATI OVO KAD ZAVRSIM TRECI AKTIVITI else if(view.getId() == R.id.log_button)
+
     }
 }
