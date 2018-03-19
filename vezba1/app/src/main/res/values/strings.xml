@@ -17,4 +17,5 @@
     <string name="my_friend">My Friend</string>
     <string name="message_text">message text</string>
     <string name="send">send</string>
+    <string name="message_send">Message is sent!</string>
 </resources>

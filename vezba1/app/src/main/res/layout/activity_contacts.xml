@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="15dp"
     tools:context="bojan.strbac.chataplication.ContactsActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/log_out_id"
+        android:id="@+id/con_log_out_id"
         android:text="@string/log_out"
         android:layout_gravity="right"
         android:background="@color/colorDarkRed"/>
@@ -18,6 +19,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/con_text_id"
         android:text="@string/my_friend"
         android:clickable="true"
         android:layout_marginTop="40dp"/>

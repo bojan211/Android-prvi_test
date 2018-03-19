@@ -10,7 +10,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/log_out2_id"
+        android:id="@+id/mes_log_out_id"
         android:text="@string/log_out"
         android:background="@color/colorDarkRed"
         android:layout_gravity="right"/>
@@ -24,15 +24,18 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/message_id"
+            android:id="@+id/mes_message_id"
             android:hint="@string/message_text"
+            android:layout_marginLeft="20dp"
             android:ems="10"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/mes_send_id"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="40dp"
+            android:enabled="false"
             android:text="@string/send"
             android:background="@color/colorPrimaryDark"/>
 
