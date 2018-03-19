@@ -26,6 +26,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         log_out = findViewById(R.id.mes_log_out_id);
         log_out.setOnClickListener(this);
         send = findViewById(R.id.mes_send_id);
+        send.setOnClickListener(this);
 
         message = findViewById(R.id.mes_message_id);
 
