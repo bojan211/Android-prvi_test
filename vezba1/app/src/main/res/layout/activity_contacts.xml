@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="15dp"
     tools:context="bojan.strbac.chataplication.ContactsActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/con_text_id"
+        android:text="@string/my_chat_list"
+        android:textSize="18sp"
+        android:clickable="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="10dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/con_log_out_id"
         android:text="@string/log_out"
-        android:layout_gravity="right"
-        android:background="@color/colorDarkRed"/>
+        android:layout_marginLeft="269dp"/>
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/con_text_id"
-        android:text="@string/my_friend"
-        android:clickable="true"
-        android:layout_marginTop="40dp"/>
-</LinearLayout>
+        android:id="@+id/lista"
+        android:layout_marginTop="50dp">
+    </ListView>
+
+
+</RelativeLayout>

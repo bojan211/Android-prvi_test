@@ -19,4 +19,10 @@
     <string name="send">send</string>
     <string name="message_send">Message is sent!</string>
     <string name="birth_date">Birth date:</string>
+    <string name="my_chat_list">My chat list</string>
+    <string name="contact1">Josie Enyeart</string>
+    <string name="contact2">Mario Gartrell</string>
+    <string name="contact3">Rachel Kuester</string>
+    <string name="contact4">Stacia Gilmour</string>
+    <string name="contact5">Robbie Stam</string>
 </resources>
