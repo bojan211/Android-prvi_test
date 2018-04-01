@@ -25,4 +25,11 @@
     <string name="contact3">Rachel Kuester</string>
     <string name="contact4">Stacia Gilmour</string>
     <string name="contact5">Robbie Stam</string>
+    <string name="message1">Hey!!!</string>
+    <string name="message2">Hello how are you?</string>
+    <string name="message3">I am fine thanks, whats up?</string>
+    <string name="message4">Long time no see</string>
+    <string name="message5">Nothiing special, will i see you tonight?</string>
+    <string name="message6">Sure meet me at 8</string>
+    <string name="message7">Fine, see you</string>
 </resources>

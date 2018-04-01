@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,11 +62,18 @@ public class CharacterAdapter extends BaseAdapter{
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convert_view = inflater.inflate(R.layout.raw_item, null);
             //Set on click listener for button in list item !!!
-            ImageView next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
+            final ImageView next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
+            final View bundle_convert_view = convert_view;
             next_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    TextView text = bundle_convert_view.findViewById(R.id.item_name_ID);
+                    String name = text.getText().toString();
+                    bundle.putString("item_name_ID", name);
+
                     Intent intent = new Intent(context,MessageActivity.class);
+                    intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
             });
