@@ -14,14 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MessageActivity extends AppCompatActivity implements View.OnClickListener{
+public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button log_out;
     private Button send;
     private EditText message;
     private ListView list;
     final MessageAdapter adapter = new MessageAdapter(this);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +40,26 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         String name = bundle.getString("item_name_ID");
         contact_name.setText(name);
 
-        //MessageAdapter adapter = new MessageAdapter(this);
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message1).toString(),true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message2).toString(),false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message3).toString(),true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message4).toString(),false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message5).toString(),true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message6).toString(),false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message7).toString(),true));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message1).toString(), true));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message2).toString(), false));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message3).toString(), true));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message4).toString(), false));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message5).toString(), true));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message6).toString(), false));
+        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message7).toString(), true));
 
         //ListView list = (ListView) findViewById(R.id.message_list_ID);
         list.setAdapter(adapter);
 
-
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                ModelMessage item = (ModelMessage) adapter.getItem(position);
+                adapter.RemoveCharacter(item);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
 
         message.addTextChangedListener(new TextWatcher() {
             @Override

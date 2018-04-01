@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean user_entered = false;
     boolean pass_entered = false;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -26,15 +26,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     boolean user_entered = false;
     boolean pass_entered = false;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-
 
         username = findViewById(R.id.reg_user_id);
         password = findViewById(R.id.reg_pass_id);

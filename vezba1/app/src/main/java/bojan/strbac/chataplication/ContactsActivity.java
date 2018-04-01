@@ -12,7 +12,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     private Button log_out;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

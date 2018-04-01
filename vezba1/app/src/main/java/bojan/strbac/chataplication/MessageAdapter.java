@@ -29,6 +29,11 @@ public class MessageAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
+    public void RemoveCharacter(ModelMessage model){
+        messages.remove(model);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return messages.size();

@@ -33,7 +33,6 @@ public class CharacterAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getCount() {
         return characters.size();
