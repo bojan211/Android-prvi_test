@@ -24,12 +24,12 @@ public class MessageAdapter extends BaseAdapter{
         messages = new ArrayList<ModelMessage>();
     }
 
-    public void AddCharacter(ModelMessage model){
+    public void AddMessage(ModelMessage model){
         messages.add(model);
         notifyDataSetChanged();
     }
 
-    public void RemoveCharacter(ModelMessage model){
+    public void RemoveMessage(ModelMessage model){
         messages.remove(model);
         notifyDataSetChanged();
     }
@@ -63,7 +63,6 @@ public class MessageAdapter extends BaseAdapter{
 
             ViewHolder holder = new ViewHolder();
             holder.message = (TextView) convert_view.findViewById(R.id.item_message_ID);
-
 
             convert_view.setTag(holder);
         }

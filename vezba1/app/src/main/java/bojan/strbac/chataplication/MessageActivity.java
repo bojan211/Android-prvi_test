@@ -40,22 +40,21 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         String name = bundle.getString("item_name_ID");
         contact_name.setText(name);
 
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message1).toString(), true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message2).toString(), false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message3).toString(), true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message4).toString(), false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message5).toString(), true));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message6).toString(), false));
-        adapter.AddCharacter(new ModelMessage(getResources().getString(R.string.message7).toString(), true));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message1).toString(), true));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message2).toString(), false));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message3).toString(), true));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message4).toString(), false));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message5).toString(), true));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message6).toString(), false));
+        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message7).toString(), true));
 
-        //ListView list = (ListView) findViewById(R.id.message_list_ID);
         list.setAdapter(adapter);
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ModelMessage item = (ModelMessage) adapter.getItem(position);
-                adapter.RemoveCharacter(item);
+                adapter.RemoveMessage(item);
                 adapter.notifyDataSetChanged();
                 return true;
             }
@@ -97,7 +96,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             CharSequence toast_text = "Message is sent!";
             int duration = Toast.LENGTH_SHORT;
             String text = message.getText().toString();
-            adapter.AddCharacter(new ModelMessage(text,true));
+            adapter.AddMessage(new ModelMessage(text,true));
             Toast toast = Toast.makeText(context, toast_text, duration);
             toast.show();
             message.setText("");
