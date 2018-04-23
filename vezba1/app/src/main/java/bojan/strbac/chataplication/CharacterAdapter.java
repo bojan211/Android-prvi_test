@@ -2,6 +2,7 @@ package bojan.strbac.chataplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,14 +24,26 @@ import java.util.Random;
 public class CharacterAdapter extends BaseAdapter{
     private Context context;
     private ArrayList<Model> characters;
+
+    public static final String MY_PREFS_NAME = "PrefsFile";
     
     public CharacterAdapter(Context context_par) {
         context = context_par;
         characters = new ArrayList<Model>();
     }
-    
-    public void AddCharacter(Model model){
-        characters.add(model);
+
+    public void removeContact(int position){
+        characters.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void addCharacters(Model[] contacts){
+        characters.clear();
+        if(contacts != null) {
+            for(Model contact : contacts) {
+                characters.add(contact);
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -61,7 +75,7 @@ public class CharacterAdapter extends BaseAdapter{
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convert_view = inflater.inflate(R.layout.raw_item, null);
             //Set on click listener for button in list item !!!
-            final ImageView next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
+            final ImageView next_button = (ImageButton) convert_view.findViewById(R.id.next_button_ID);
             final View bundle_convert_view = convert_view;
             next_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,6 +85,10 @@ public class CharacterAdapter extends BaseAdapter{
                     String name = text.getText().toString();
                     bundle.putString("item_name_ID", name);
 
+                    SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE).edit();
+                    editor.putString("receiver_user_id", view.getTag().toString());
+                    editor.apply();
+
                     Intent intent = new Intent(context,MessageActivity.class);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
@@ -79,7 +97,8 @@ public class CharacterAdapter extends BaseAdapter{
             ViewHolder holder = new ViewHolder();
             holder.initial = (TextView) convert_view.findViewById(R.id.item_letter_ID);
             holder.full_name = (TextView) convert_view.findViewById(R.id.item_name_ID);
-            holder.next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
+            holder.next_button = (ImageButton) convert_view.findViewById(R.id.next_button_ID);
+            holder.next_button.setTag(position);
             holder.initial.setBackgroundColor(RandomColor());
 
             convert_view.setTag(holder);
@@ -87,9 +106,11 @@ public class CharacterAdapter extends BaseAdapter{
 
         Model model = (Model) getItem(position);
         ViewHolder holder = (ViewHolder) convert_view.getTag();
-        holder.initial.setText(model.initial);
-        holder.full_name.setText(model.contact_name);
-        holder.next_button.setImageDrawable(model.send_button);
+        holder.initial.setText(model.getFirst_name().substring(0,1).toUpperCase());
+        String full_name = model.getFirst_name() + " " + model.getLast_name();
+        holder.full_name.setText(full_name);
+        //holder.next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
+        holder.next_button.setTag(model.getId());
         holder.initial.setBackgroundColor(RandomColor());
 
         return convert_view;
@@ -98,7 +119,7 @@ public class CharacterAdapter extends BaseAdapter{
     private class ViewHolder {
         public TextView initial = null;
         public TextView full_name = null;
-        public ImageView next_button = null;
+        public ImageButton next_button = null;
     }
 
     public int RandomColor(){

@@ -19,17 +19,29 @@ public class MessageAdapter extends BaseAdapter{
     private Context context;
     private ArrayList<ModelMessage> messages;
 
+    private static final String MY_PREFS_NAME = "PrefsFile";
+
     public MessageAdapter(Context context_par) {
         context = context_par;
         messages = new ArrayList<ModelMessage>();
     }
 
-    public void AddMessage(ModelMessage model){
+    public void addMessages(ModelMessage[] m_messages) {
+        messages.clear();
+        if (messages != null) {
+            for (ModelMessage message : messages) {
+                messages.add(message);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    public void addMessage(ModelMessage model){
         messages.add(model);
         notifyDataSetChanged();
     }
 
-    public void RemoveMessage(ModelMessage model){
+    public void removeMessage(ModelMessage model){
         messages.remove(model);
         notifyDataSetChanged();
     }
@@ -69,7 +81,7 @@ public class MessageAdapter extends BaseAdapter{
 
         ModelMessage model = (ModelMessage) getItem(position);
         ViewHolder holder = (ViewHolder) convert_view.getTag();
-        holder.message.setText(model.message);
+        holder.message.setText(model.getMessage());
         if(model.sending) {
             holder.message.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);

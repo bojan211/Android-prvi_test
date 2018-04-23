@@ -7,37 +7,31 @@ import android.graphics.drawable.Drawable;
  */
 
 public class Model {
-    public String initial;
-    public String contact_name;
-    public Drawable send_button;
+    private String id;
+    private String first_name;
+    private String last_name;
+    private String username;
 
-    public Model(String m_initial, String m_contact_name, Drawable m_send_button) {
-        this.initial = m_initial;
-        this.contact_name = m_contact_name;
-        this.send_button = m_send_button;
+    public Model(String m_id, String m_first, String m_last, String m_username) {
+        this.id = m_id;
+        this.first_name = m_first;
+        this.last_name = m_last;
+        this.username = m_username;
     }
 
-    public String getInitial() {
-        return initial;
+    public String getId() {
+        return id;
     }
 
-    public String getContact_name() {
-        return contact_name;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public Drawable getSend_button() {
-        return send_button;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setInitial(String initial) {
-        this.initial = initial;
-    }
-
-    public void setContact_name(String contact_name) {
-        this.contact_name = contact_name;
-    }
-
-    public void setSend_button(Drawable send_button) {
-        this.send_button = send_button;
+    public String getUsername() {
+        return username;
     }
 }

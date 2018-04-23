@@ -2,6 +2,7 @@ package bojan.strbac.chataplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +22,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private EditText message;
     private ListView list;
     final MessageAdapter adapter = new MessageAdapter(this);
+    private DbHelper db;
+    private ModelMessage[] messages;
+
+    private static final String MY_PREFS_NAME = "PrefsFile";
+    private String receiver_user_id;
+    private String sender_user_id;
+    private String receiver_username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +43,17 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         list = findViewById(R.id.message_list_ID);
         TextView contact_name = findViewById(R.id.contact_name_ID);
 
+        //Setting contact name with bundle
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String name = bundle.getString("item_name_ID");
         contact_name.setText(name);
 
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message1).toString(), true));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message2).toString(), false));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message3).toString(), true));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message4).toString(), false));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message5).toString(), true));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message6).toString(), false));
-        adapter.AddMessage(new ModelMessage(getResources().getString(R.string.message7).toString(), true));
+        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        sender_user_id = prefs.getString("loggedin_user", null);
+        receiver_user_id = prefs.getString("receiver_user_id", null);
+
+        db = new DbHelper(this);
 
         list.setAdapter(adapter);
 
@@ -54,7 +61,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ModelMessage item = (ModelMessage) adapter.getItem(position);
-                adapter.RemoveMessage(item);
+                adapter.removeMessage(item);
                 adapter.notifyDataSetChanged();
                 return true;
             }
@@ -96,7 +103,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             CharSequence toast_text = "Message is sent!";
             int duration = Toast.LENGTH_SHORT;
             String text = message.getText().toString();
-            adapter.AddMessage(new ModelMessage(text,true));
+            //adapter.AddMessage(new ModelMessage(text,true));
             Toast toast = Toast.makeText(context, toast_text, duration);
             toast.show();
             message.setText("");
