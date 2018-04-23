@@ -1,6 +1,7 @@
 package bojan.strbac.chataplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -82,7 +83,11 @@ public class MessageAdapter extends BaseAdapter{
         ModelMessage model = (ModelMessage) getItem(position);
         ViewHolder holder = (ViewHolder) convert_view.getTag();
         holder.message.setText(model.getMessage());
-        if(model.sending) {
+
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
+        String sender_userid = prefs.getString("loggedin_userId", null);
+
+        if(model.getSender_id().compareTo(sender_userid) == 0) {
             holder.message.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
         }

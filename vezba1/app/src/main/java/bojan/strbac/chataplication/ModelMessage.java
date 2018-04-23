@@ -9,14 +9,13 @@ public class ModelMessage {
     private String sender_id;
     private String receiver_id;
     private String message;
-    public boolean sending = false;
 
-    public ModelMessage(String m_message_id, String m_sender_id, String m_receiver_id, String m_message, boolean m_type) {
+
+    public ModelMessage(String m_message_id, String m_sender_id, String m_receiver_id, String m_message) {
         this.message_id = m_message_id;
         this.sender_id = m_sender_id;
         this.receiver_id = m_receiver_id;
         this.message = m_message;
-        this.sending = m_type;
     }
 
     public String getMessage_id() {

@@ -121,9 +121,9 @@ public class DbHelper extends SQLiteOpenHelper {
         close();
     }
 
-    public ModelMessage[] readMessages() {
+    public ModelMessage[] readMessages(String sender, String receiver) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME_MESSAGE, null, null, null, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME_MESSAGE, null, "(sender_id =? AND receiver_id =?) OR (sender_id =? AND receiver_id =?)", new String[] {sender,receiver,receiver,sender}, null, null, null, null);
 
         if(cursor.getCount() <= 0) {
             return null;
@@ -155,12 +155,12 @@ public class DbHelper extends SQLiteOpenHelper {
         String sender_id = cursor.getString(cursor.getColumnIndex(COLUMN_SENDER_ID));
         String receiver_id = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIVER_ID));
         String message = cursor.getString(cursor.getColumnIndex(COLUMN_MESSAGE));
-        return new ModelMessage(message_id, sender_id, receiver_id, message, false);
+        return new ModelMessage(message_id, sender_id, receiver_id, message);
     }
 
-    public void deleteMessage(String index) {
+    public void deleteMessage(String message_id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME_MESSAGE, COLUMN_MESSAGE_ID + "=?", new String[] {index});
+        db.delete(TABLE_NAME_MESSAGE, COLUMN_MESSAGE_ID + "=?", new String[] {message_id});
         close();
     }
 }

@@ -60,9 +60,20 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                ModelMessage item = (ModelMessage) adapter.getItem(position);
-                adapter.removeMessage(item);
-                adapter.notifyDataSetChanged();
+                final int position_for_delete = position;
+
+                final ModelMessage message = (ModelMessage) adapter.getItem(position_for_delete);
+
+                if (messages != null) {
+                    for (int i = 0; i < messages.length; i++) {
+                        if (messages[i].getMessage_id().compareTo(message.getMessage_id()) == 0) {
+                            db.deleteMessage(message.getMessage_id());
+                            break;
+                        }
+                    }
+                }
+
+                updateMessagesList();
                 return true;
             }
         });
@@ -93,21 +104,30 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateMessagesList();
+    }
+
+    @Override
     public void onClick(View view) {
         if(view.getId() == R.id.mes_log_out_id) {
             Intent intent = new Intent(MessageActivity.this, MainActivity.class);
             startActivity(intent);
         }
         else if(view.getId() == R.id.mes_send_id) {
-            Context context = getApplicationContext();
-            CharSequence toast_text = "Message is sent!";
-            int duration = Toast.LENGTH_SHORT;
-            String text = message.getText().toString();
-            //adapter.AddMessage(new ModelMessage(text,true));
-            Toast toast = Toast.makeText(context, toast_text, duration);
-            toast.show();
-            message.setText("");
+            String message_for_sending = message.getText().toString();
+            ModelMessage m_message = new ModelMessage(null, sender_user_id, receiver_user_id, message_for_sending);
+            db.insertMessage(m_message);
+            updateMessagesList();
+            Toast.makeText(getApplicationContext(), R.string.message_send, Toast.LENGTH_LONG).show();
+            message.getText().clear();
         }
 
+    }
+
+    public void updateMessagesList() {
+        messages = db.readMessages(sender_user_id, receiver_user_id);
+        adapter.addMessages(messages);
     }
 }

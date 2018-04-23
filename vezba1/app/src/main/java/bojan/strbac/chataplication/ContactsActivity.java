@@ -44,7 +44,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-
         deleteLoggedContact();
     }
 
