@@ -29,8 +29,8 @@ public class MessageAdapter extends BaseAdapter{
 
     public void addMessages(ModelMessage[] m_messages) {
         messages.clear();
-        if (messages != null) {
-            for (ModelMessage message : messages) {
+        if (m_messages != null) {
+            for (ModelMessage message : m_messages) {
                 messages.add(message);
             }
         }
@@ -87,14 +87,14 @@ public class MessageAdapter extends BaseAdapter{
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
         String sender_userid = prefs.getString("loggedin_userId", null);
 
-        if(model.getSender_id().compareTo(sender_userid) == 0) {
+        //if(model.getSender_id().compareTo(sender_userid) == 0) {
             holder.message.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-        }
-        else {
-            holder.message.setBackgroundColor(Color.parseColor("#b7b3b3"));
-            holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        }
+        //}
+        //else {
+        //    holder.message.setBackgroundColor(Color.parseColor("#b7b3b3"));
+        //    holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        //}
 
 
         return convert_view;
