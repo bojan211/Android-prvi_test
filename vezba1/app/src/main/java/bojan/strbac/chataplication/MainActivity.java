@@ -1,6 +1,8 @@
 package bojan.strbac.chataplication;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +13,11 @@ import android.widget.EditText;
 import android.content.Intent;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText username;
@@ -18,12 +25,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button log;
     private Button reg;
 
-    private DbHelper db;
+    //private DbHelper db;
 
     public static final String MY_PREFS_NAME = "PrefsFile";
 
+    private Context context;
+    private HttpHelper http;
+    private Handler handler;
+
     boolean user_entered = false;
     boolean pass_entered = false;
+
+    private static String BASE_URL = "http://18.205.194.168:80";
+    private static String LOGIN_URL = BASE_URL + "/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         reg = findViewById(R.id.main_reg_button);
         reg.setOnClickListener(this);
 
-        db = new DbHelper(this);
+        //db = new DbHelper(this);
+        context = this;
+        http = new HttpHelper();
+        handler = new Handler();
 
         username.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,30 +123,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         else if(view.getId() == R.id.main_log_button) {
-            Intent intent2 = new Intent(MainActivity.this, ContactsActivity.class);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("username", username.getText().toString());
+                        jsonObject.put("password", password.getText().toString());
 
-            Model[] contacts = db.readContacts();
+                        final boolean response = http.logInUserOnServer(context, LOGIN_URL, jsonObject);
 
-            SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(response) {
+                                    SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                                    editor.putString("loggedin_username", username.getText().toString());
+                                    editor.apply();
 
-            int contact_found = 0;
-
-            if(contacts != null) {
-                for(int i = 0; i < contacts.length; i++) {
-                    if((contacts[i].getUsername().compareTo(username.getText().toString())) == 0 ) {
-                        editor.putString("loggedin_user", contacts[i].getId());
-                        editor.apply();
-                        contact_found = 1;
+                                    Intent intent2 = new Intent(MainActivity.this, ContactsActivity.class);
+                                    startActivity(intent2);
+                                }
+                                else {
+                                    SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                                    String error_message = prefs.getString("login_error_message", null);
+                                    Toast.makeText(MainActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
-            }
-
-            if(contact_found == 1) {
-                startActivity(intent2); // If contact is found, go to contact activity
-            }
-            else {
-                Toast.makeText(this, getText(R.string.user_doesnt_exists), Toast.LENGTH_SHORT).show();
-            }
+            }).start();
         }
     }
 }

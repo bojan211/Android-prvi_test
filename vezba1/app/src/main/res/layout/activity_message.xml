@@ -25,6 +25,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/refresh_messages"
+            android:text="@string/refresh"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/mes_log_out_id"
             android:text="@string/log_out"
             android:background="@color/colorDarkRed"

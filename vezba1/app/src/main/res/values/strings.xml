@@ -23,4 +23,6 @@
     <string name="user_exists">Username exists, please choose another!</string>
     <string name="user_doesnt_exists">Username doesnt exists!</string>
     <string name="loggedin_user">User: </string>
+    <string name="refresh">Refresh</string>
+    <string name="successfully_registred_user">User has been successfully registered!</string>
 </resources>
