@@ -3,6 +3,7 @@ package bojan.strbac.chataplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Korisnik on 1.4.2018..
  */
 
 public class MessageAdapter extends BaseAdapter{
+    private static final String TAG = "MessageAdapter";
+    
     private Context context;
     private ArrayList<ModelMessage> messages;
 
@@ -85,16 +90,17 @@ public class MessageAdapter extends BaseAdapter{
         holder.message.setText(model.getMessage());
 
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, context.MODE_PRIVATE);
-        String sender_userid = prefs.getString("loggedin_userId", null);
+        String sender_userid = prefs.getString("loggedin_username", null);
+        Log.d(TAG, "getView: " + sender_userid + model.getSender_id().toString());
 
-        //if(model.getSender_id().compareTo(sender_userid) == 0) {
+        if((model.getSender_id().toString().compareTo(sender_userid) == 0)) {
             holder.message.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-        //}
-        //else {
-        //    holder.message.setBackgroundColor(Color.parseColor("#b7b3b3"));
-        //    holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        //}
+        }
+        else {
+            holder.message.setBackgroundColor(Color.parseColor("#b7b3b3"));
+            holder.message.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        }
 
 
         return convert_view;

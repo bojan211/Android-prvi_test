@@ -17,6 +17,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Korisnik on 30.3.2018..
  */
@@ -39,9 +41,12 @@ public class CharacterAdapter extends BaseAdapter{
 
     public void addCharacters(Model[] contacts){
         characters.clear();
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String logged_in_username = prefs.getString("loggedin_username", null);
         if(contacts != null) {
             for(Model contact : contacts) {
-                characters.add(contact);
+                if(!contact.getUsername().equals(logged_in_username))
+                    characters.add(contact);
             }
         }
         notifyDataSetChanged();
@@ -85,7 +90,7 @@ public class CharacterAdapter extends BaseAdapter{
                     String name = text.getText().toString();
                     bundle.putString("item_name_ID", name);
 
-                    SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, Context.MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
                     editor.putString("receiver_user_id", view.getTag().toString());
                     editor.apply();
 
@@ -106,11 +111,11 @@ public class CharacterAdapter extends BaseAdapter{
 
         Model model = (Model) getItem(position);
         ViewHolder holder = (ViewHolder) convert_view.getTag();
-        holder.initial.setText(model.getFirst_name().substring(0,1).toUpperCase());
-        String full_name = model.getFirst_name() + " " + model.getLast_name();
+        holder.initial.setText(model.getUsername().substring(0,1).toUpperCase());
+        String full_name = model.getUsername(); // + " " + model.getLast_name()
         holder.full_name.setText(full_name);
         //holder.next_button = (ImageView) convert_view.findViewById(R.id.next_button_ID);
-        holder.next_button.setTag(model.getId());
+        holder.next_button.setTag(model.getUsername());
         holder.initial.setBackgroundColor(RandomColor());
 
         return convert_view;

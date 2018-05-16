@@ -17,7 +17,7 @@
     <string name="my_friend">My Friend</string>
     <string name="message_text">message text</string>
     <string name="send">send</string>
-    <string name="message_send">Message is sent!</string>
+    <string name="message_sent">Message is sent!</string>
     <string name="birth_date">Birth date:</string>
     <string name="my_chat_list">My chat list</string>
     <string name="user_exists">Username exists, please choose another!</string>
