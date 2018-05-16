@@ -61,7 +61,7 @@ public class HttpHelper {
             SharedPreferences.Editor editor = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
             String responseMsg = urlConnection.getResponseMessage();
             String registerErr = Integer.toString(responseCode) + " : " + responseMsg;
-            editor.putString("registerErr", registerErr);
+            editor.putString("register_error_message", registerErr);
             editor.apply();
         }
 
@@ -112,7 +112,7 @@ public class HttpHelper {
         } else {
             String responseMsg = urlConnection.getResponseMessage();
             String loginErr = Integer.toString(responseCode) + " : " + responseMsg;
-            editor.putString("loginErr", loginErr);
+            editor.putString("login_error_message", loginErr);
             editor.apply();
         }
 
