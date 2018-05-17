@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -23,6 +24,8 @@ public class HttpHelper {
 
     private static final int SUCCESS = 200;
     public static final String MY_PREFS_NAME = "PrefsFile";
+
+    private static final String TAG = "HttpHelper";
 
     public boolean registerUserOnServer(Context context, String urlString, JSONObject jsonObject) throws IOException{
 
@@ -310,5 +313,41 @@ public class HttpHelper {
             editor.apply();
             return null;
         }
+    }
+
+    public boolean httpDelete(Context context, String urlString, JSONObject jsonObject) throws IOException, JSONException {
+        HttpURLConnection urlConnection = null;
+        java.net.URL url = new URL(urlString);
+
+        Log.d(TAG, "httpDelete: "+","  + jsonObject.toString());
+
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        String sessionId = prefs.getString("sessionId", null);
+
+        urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("DELETE");
+        urlConnection.setRequestProperty("sessionid", sessionId);
+        urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        urlConnection.setRequestProperty("Accept","application/json");
+        try {
+            urlConnection.connect();
+        } catch (IOException e) {
+            return false;
+        }
+
+
+        DataOutputStream os = new DataOutputStream(urlConnection.getOutputStream());
+
+        /*write json object*/
+        os.writeBytes(jsonObject.toString());
+        os.flush();
+        os.close();
+
+        int responseCode = urlConnection.getResponseCode();
+
+        Log.i("STATUS", String.valueOf(responseCode));
+        Log.i("MSG" , urlConnection.getResponseMessage());
+        urlConnection.disconnect();
+        return (responseCode==SUCCESS);
     }
 }

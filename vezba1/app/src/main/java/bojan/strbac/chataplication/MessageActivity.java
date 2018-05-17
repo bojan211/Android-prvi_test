@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import java.io.IOException;
 
 public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MessageActivity";
+    
     private Button log_out;
     private Button refresh;
     private Button send;
@@ -69,7 +72,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         contact_name.setText(name);
 
         SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        sender_user_id = prefs.getString("loggedin_user", null);
+        sender_user_id = prefs.getString("loggedin_username", null);
         receiver_user_id = prefs.getString("receiver_user_id", null);
 
         //db = new DbHelper(this);
@@ -78,26 +81,47 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
         list.setAdapter(adapter);
 
-        /*list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                final int position_for_delete = position;
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                new Thread(new Runnable() {
+                    public void run() {
+                        JSONObject jsonObject = new JSONObject();
+                        ModelMessage model  = (ModelMessage) adapter.getItem(position);
+                        String message_for_del = model.getMessage();
 
-                final ModelMessage message = (ModelMessage) adapter.getItem(position_for_delete);
+                        try {
+                            jsonObject.put("sender", sender_user_id);
+                            jsonObject.put("receiver", receiver_user_id);
+                            jsonObject.put("data", message_for_del);
 
-                if (messages != null) {
-                    for (int i = 0; i < messages.length; i++) {
-                        if (messages[i].getMessage_id().compareTo(message.getMessage_id()) == 0) {
-                            //db.deleteMessage(message.getMessage_id());
-                            break;
+                            Log.d(TAG, "run: " + jsonObject.toString());
+
+                            final boolean success = http.httpDelete(MessageActivity.this, POST_MESSAGE_URL, jsonObject);
+
+                            handler.post(new Runnable(){
+                                public void run() {
+                                    if (success) {
+                                        Toast.makeText(MessageActivity.this, getText(R.string.message_sent), Toast.LENGTH_SHORT).show();
+                                        message.getText().clear();
+                                        updateMessagesList();
+                                    } else {
+                                        SharedPreferences prefs = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+                                        String sendMsgErr = prefs.getString("sendMsgErr", null);
+                                        Toast.makeText(MessageActivity.this, sendMsgErr, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
-                }
-
-                updateMessagesList();
+                }).start();
                 return true;
             }
-        });*/
+        });
 
         message.addTextChangedListener(new TextWatcher() {
             @Override
@@ -161,6 +185,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 public void run() {
                     JSONObject jsonObject = new JSONObject();
                     try {
+
                         jsonObject.put("receiver", receiver_user_id);
                         jsonObject.put("data", message.getText().toString());
 
