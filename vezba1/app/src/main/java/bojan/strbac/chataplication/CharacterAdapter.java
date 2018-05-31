@@ -39,6 +39,14 @@ public class CharacterAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
+    public void addContact(Model oldContact, Model newContact) {
+
+        int index = characters.indexOf(oldContact);
+        characters.set(index, newContact);
+
+        notifyDataSetChanged();
+    }
+
     public void addCharacters(Model[] contacts){
         characters.clear();
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);

@@ -1,8 +1,16 @@
 package bojan.strbac.chataplication;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsActivity extends AppCompatActivity implements View.OnClickListener{
+public class ContactsActivity extends AppCompatActivity implements View.OnClickListener, ServiceConnection{
 
     private Button log_out;
     private Button refresh;
@@ -36,6 +44,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     private static String BASE_URL = "http://18.205.194.168:80";
     private static String CONTACTS_URL = BASE_URL + "/contacts";
     private static String LOGOUT_URL = BASE_URL + "/logout";
+
+    private INotificationBinder m_service = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +67,23 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         http = new HttpHelper();
         handler = new Handler();
+
+        bindService(new Intent(ContactsActivity.this, ServiceNotification.class), this , Context.BIND_AUTO_CREATE);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateContactList();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (m_service != null) {
+            unbindService(this);
+        }
     }
 
     /*public void deleteLoggedContact() {
@@ -128,7 +149,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                                 for (int i = 0; i < contacts.length(); i++) {
                                     try {
                                         json_contact = contacts.getJSONObject(i);
-                                        all_contacts[i] = new Model(json_contact.getString("username"));
+                                        all_contacts[i] = new Model(json_contact.getString("username"), getText(R.string.get_message).toString());
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
                                     }
@@ -144,5 +165,98 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 }
             }
         }).start();
+    }
+
+    public void getLastMsg(Model oldContact){
+        final String contact = oldContact.getUsername();
+        final Model oldContactTemp = oldContact;
+
+        new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    final JSONArray messages = http.getMessagesFromServer(ContactsActivity.this, contact);
+                    handler.post(new Runnable(){
+                        public void run() {
+                            if (messages != null) {
+                                String last_message = getText(R.string.no_new_messages).toString();
+                                JSONObject json_message;
+                                if (messages.length()>0){
+                                    int lastMsgIndex = messages.length()-1;
+                                    try {
+                                        json_message = messages.getJSONObject(lastMsgIndex);
+                                        last_message = json_message.getString("sender") +": " + json_message.getString("data");
+                                    } catch (JSONException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                                Model newContact = new Model(contact, last_message);
+                                adapter.addContact(oldContactTemp, newContact);
+                            }
+                        }
+                    });
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        m_service = INotificationBinder.Stub.asInterface(service);
+        try {
+            m_service.setCallback(new NotificationCallback());
+        } catch (RemoteException e) {
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        m_service = null;
+    }
+
+    private class NotificationCallback extends INotificationCallback.Stub {
+
+        @Override
+        public void onCallbackCall() throws RemoteException {
+
+            final HttpHelper http = new HttpHelper();
+            final Handler handler = new Handler();
+
+            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), null)
+                    .setSmallIcon(R.drawable.ic_send_black)
+                    .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                            R.mipmap.ic_launcher))
+                    .setContentTitle(getText(R.string.app_name))
+                    .setContentText(getText(R.string.have_new_message))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+
+
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        final boolean response = http.getNotification(ContactsActivity.this);
+
+                        handler.post(new Runnable() {
+                            public void run() {
+                                if (response) {
+                                    // notificationId is a unique int for each notification that you must define
+                                    notificationManager.notify(2, mBuilder.build());
+                                }
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 }
