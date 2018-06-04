@@ -36,6 +36,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     //private DbHelper db;
     private ModelMessage[] all_messages;
 
+    Crypto m_crypto;
+
     private static final String MY_PREFS_NAME = "PrefsFile";
     private String receiver_user_id;
     private String sender_user_id;
@@ -78,6 +80,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         //db = new DbHelper(this);
         http = new HttpHelper();
         handler = new Handler();
+
+        m_crypto = new Crypto();
 
         list.setAdapter(adapter);
 
@@ -187,8 +191,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                     try {
 
                         jsonObject.put("receiver", receiver_user_id);
-                        jsonObject.put("data", message.getText().toString());
-
+                        String my_message = message.getText().toString();
+                        String crypted_message = m_crypto.crypt(my_message);
+                        jsonObject.put("data", crypted_message);
                         final boolean success = http.sendMessageToServer(MessageActivity.this, POST_MESSAGE_URL, jsonObject);
 
                         handler.post(new Runnable(){
@@ -236,7 +241,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                 for (int i = 0; i < messages.length(); i++) {
                                     try {
                                         json_message = messages.getJSONObject(i);
-                                        all_messages[i] = new ModelMessage(json_message.getString("sender"),json_message.getString("data"));
+                                        //all_messages[i] = new ModelMessage(json_message.getString("sender"),json_message.getString("data"));
+                                        String message = json_message.getString("data");
+                                        String decrypted_message = m_crypto.crypt(message);
+                                        all_messages[i] = new ModelMessage(json_message.getString("sender"), decrypted_message);
                                     } catch (JSONException e1) {
                                         e1.printStackTrace();
                                     }
